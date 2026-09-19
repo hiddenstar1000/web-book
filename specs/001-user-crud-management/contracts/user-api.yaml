@@ -1,0 +1,268 @@
+openapi: 3.0.3
+info:
+  title: User CRUD Management REST API
+  description: OpenAPI 3.0 contract for NestJS User CRUD REST API
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001/api/v1
+    description: Local Development Server
+
+paths:
+  /users:
+    get:
+      summary: List and search users
+      operationId: listUsers
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Search term matching fullName or email
+        - name: role
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [ADMIN, USER, GUEST]
+          description: Filter by user role
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [ACTIVE, INACTIVE]
+          description: Filter by user status
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Paginated user list returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPaginatedResponse'
+
+    post:
+      summary: Create a new user
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDto'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Email conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /users/{id}:
+    get:
+      summary: Get user details by ID
+      operationId: getUserById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    patch:
+      summary: Update an existing user
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserDto'
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Delete user by ID
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User deleted successfully
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    CreateUserDto:
+      type: object
+      required:
+        - fullName
+        - email
+      properties:
+        fullName:
+          type: string
+          example: Jane Doe
+        email:
+          type: string
+          format: email
+          example: jane.doe@example.com
+        role:
+          type: string
+          enum: [ADMIN, USER, GUEST]
+          default: USER
+        status:
+          type: string
+          enum: [ACTIVE, INACTIVE]
+          default: ACTIVE
+
+    UpdateUserDto:
+      type: object
+      properties:
+        fullName:
+          type: string
+          example: Jane Doe Updated
+        email:
+          type: string
+          format: email
+          example: jane.updated@example.com
+        role:
+          type: string
+          enum: [ADMIN, USER, GUEST]
+        status:
+          type: string
+          enum: [ACTIVE, INACTIVE]
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 65f2a1b3c4e5f67890123456
+        fullName:
+          type: string
+          example: Jane Doe
+        email:
+          type: string
+          example: jane.doe@example.com
+        role:
+          type: string
+          example: USER
+        status:
+          type: string
+          example: ACTIVE
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    UserPaginatedResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserResponse'
+        total:
+          type: integer
+          example: 42
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 10
+        totalPages:
+          type: integer
+          example: 5
+
+    ErrorResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Validation failed
+        error:
+          type: string
+          example: Bad Request
