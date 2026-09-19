@@ -2,12 +2,13 @@
 
 [![NestJS](https://img.shields.io/badge/Backend-NestJS_10-E0234E?logo=nestjs)](https://nestjs.com/)
 [![Next.js](https://img.shields.io/badge/Frontend-Next.js_14-000000?logo=next.js)](https://nextjs.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Styling-Tailwind_CSS_3.4-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
 [![MongoDB](https://img.shields.io/badge/Database-MongoDB-47A248?logo=mongodb)](https://www.mongodb.com/)
 [![Jest](https://img.shields.io/badge/Testing-Jest_Coverage_%3E90%25-C21325?logo=jest)](https://jestjs.io/)
 [![Spec Kit](https://img.shields.io/badge/Workflow-Spec--Driven_Development-blueviolet)](https://github.com/github/spec-kit)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-A decoupled, modern full-stack User Directory Management application built with a **NestJS REST API** backend, **Next.js 14+ (App Router)** frontend, and **MongoDB** persistence. Enforces **>90% unit test coverage** across both backend and frontend per project constitution rules.
+A decoupled, modern full-stack User Directory Management application built with a **NestJS REST API** backend, **Next.js 14+ (App Router)** frontend, **Tailwind CSS** styling, and **MongoDB** persistence. Enforces **>90% unit test coverage** across both backend and frontend per project constitution rules.
 
 ---
 
@@ -16,7 +17,7 @@ A decoupled, modern full-stack User Directory Management application built with 
 ```
                       ┌─────────────────────────────────┐
                       │  Next.js App Router UI (3000)   │
-                      │  React 18 + Tailwind CSS        │
+                      │  React 18 + Tailwind CSS 3.4    │
                       └────────────────┬────────────────┘
                                        │ REST API (HTTP/JSON)
                                        ▼
@@ -49,17 +50,21 @@ A decoupled, modern full-stack User Directory Management application built with 
 │
 ├── frontend/                 # Next.js App Router Web UI
 │   ├── src/
-│   │   ├── app/              # App Router pages (/users, /)
+│   │   ├── app/              # App Router pages (/users, /), globals.css & layout.tsx
 │   │   ├── components/       # UserTable, UserFormModal, UserSearchFilter, DeleteConfirmModal
 │   │   ├── lib/api/          # API client fetch wrapper & users service calls
 │   │   └── types/            # TypeScript User entity interfaces
+│   ├── tailwind.config.js    # Tailwind CSS 3.4 theme & keyframes config
+│   ├── postcss.config.js     # PostCSS Tailwind & Autoprefixer plugins
 │   ├── package.json
 │   └── jest.config.js        # Frontend Jest config (>90% coverage threshold)
 │
 ├── specs/                    # Spec-driven development feature specifications
 │   ├── 001-user-crud-management/
 │   ├── 002-project-documentation/
-│   └── 003-speckit-development-workflow/
+│   ├── 003-speckit-development-workflow/
+│   ├── 004-professional-tailwind-styling/
+│   └── 005-readme-documentation-update/
 │
 └── .specify/                 # Spec Kit governance & memory configuration
     └── memory/
@@ -72,9 +77,53 @@ A decoupled, modern full-stack User Directory Management application built with 
 
 - **Full User CRUD Operations**: Create new users, view paginated listing, update profiles, and delete records with modal confirmation.
 - **Search & Filter Capabilities**: Real-time text search (name and email regex match), filter by Role (`ADMIN`, `USER`, `GUEST`), and Status (`ACTIVE`, `INACTIVE`).
+- **Professional Tailwind CSS Interface**: Dark-mode palette (`slate-950`), elevated glassmorphic cards (`backdrop-blur-md`), glowing focus rings, pulsating status dots, and smooth keyframe entry animations.
 - **Data Validation & Integrity**: Server-side DTO validation (`class-validator`) and client-side real-time form checks.
 - **Duplicate Email Prevention**: Unique MongoDB email index with handled HTTP `409 Conflict` responses.
 - **Constitution-Compliant Test Coverage**: Independent Jest test suites in both `backend/` and `frontend/` exceeding 90% statement/line coverage.
+
+---
+
+## 🎨 Tailwind CSS Design System & Styling
+
+The frontend web interface (`frontend/`) utilizes **Tailwind CSS 3.4+** with custom theme extensions, utility classes, and dark-mode HSL color palettes.
+
+### 1. Configuration & Directives
+- **Config File**: [frontend/tailwind.config.js](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/frontend/tailwind.config.js)
+- **PostCSS File**: [frontend/postcss.config.js](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/frontend/postcss.config.js)
+- **Global Directives**: [frontend/src/app/globals.css](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/frontend/src/app/globals.css)
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #020617;
+  --foreground: #f8fafc;
+}
+```
+
+### 2. Custom Glassmorphism & Input Utilities
+Common design tokens are defined in `globals.css` using `@layer utilities`:
+
+| Utility Class | Purpose | Tailwind Tokens |
+|---------------|---------|-----------------|
+| `.glass-card` | Glassmorphic card overlays | `bg-slate-900/60 border border-slate-800/80 backdrop-blur-md shadow-2xl` |
+| `.glass-input` | Accessible form controls | `bg-slate-950/80 border border-slate-800 text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500` |
+| `.glass-button-primary` | Primary action button | `bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-medium shadow-lg shadow-indigo-600/25 active:scale-[0.98]` |
+| `.animate-fade-in` | Keyframe modal entry animation | `animation: fadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards` |
+
+### 3. Color Standards & Status Indicators
+- **Main Background**: `bg-slate-950` with subtle ambient radial glow mesh overlays (`from-indigo-600/10` to `violet-600/10`).
+- **Header Text**: Metallic gradient (`bg-gradient-to-r from-slate-100 via-slate-200 to-indigo-400 bg-clip-text text-transparent`).
+- **Role Badges**:
+  - `ADMIN`: `bg-amber-500/10 text-amber-400 border-amber-500/20`
+  - `USER`: `bg-indigo-500/10 text-indigo-400 border-indigo-500/20`
+  - `GUEST`: `bg-slate-500/10 text-slate-400 border-slate-500/20`
+- **Status Badges**:
+  - `ACTIVE`: `bg-emerald-500/10 text-emerald-400 border-emerald-500/20` with pulsating dot (`animate-pulse`).
+  - `INACTIVE`: `bg-rose-500/10 text-rose-400 border-rose-500/20`.
 
 ---
 
@@ -123,7 +172,7 @@ Open `http://localhost:3000` in your web browser.
 
 ## 🛠️ Spec-Driven Development Workflow (GitHub Spec Kit)
 
-This repository follows **Spec-Driven Development** using **GitHub Spec Kit** (`speckit`). All new features, refactoring, and major updates follow a structured phase lifecycle:
+This repository follows **Spec-Driven Development** using **GitHub Spec Kit** (`speckit`). All new features, refactoring, and documentation updates follow a structured phase lifecycle:
 
 ```
   ┌───────────────────────┐
@@ -131,7 +180,7 @@ This repository follows **Spec-Driven Development** using **GitHub Spec Kit** (`
   └───────────┬───────────┘
               ▼
   ┌───────────────────────┐
-  │   /speckit-specify    │ ──▶ Create user journeys, requirements, & success criteria
+  │   /speckit-specify    │ ──▶ Create user stories, requirements, & success criteria
   └───────────┬───────────┘
               ▼
   ┌───────────────────────┐
@@ -163,14 +212,14 @@ Amends or establishes core project principles (e.g. test coverage requirements, 
 *Output*: [.specify/memory/constitution.md](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/.specify/memory/constitution.md)
 
 #### 2. Create Feature Specification (`/speckit-specify`)
-Defines the functional requirements, prioritized user stories (P1, P2, P3), acceptance criteria (Given-When-Then), and edge cases in plain language without low-level implementation details.
+Creates the feature specification file (`spec.md`) and requirements quality checklist (`checklists/requirements.md`). Defines functional requirements, prioritized user stories (P1, P2, P3), acceptance criteria (Given-When-Then), and edge cases in plain language without low-level implementation details.
 ```text
-/speckit-specify Add user profile avatar upload functionality using AWS S3
+/speckit-specify Update README.md on using tailwind-css and document speckit-specify
 ```
-*Output*: `specs/<NNN-feature-name>/spec.md` & `checklists/requirements.md`
+*Output*: `specs/<NNN-feature-name>/spec.md` & `specs/<NNN-feature-name>/checklists/requirements.md`
 
 #### 3. Create Implementation Plan & Design Artifacts (`/speckit-plan`)
-Resolves technical choices, extracts entities, and generates OpenAPI contracts, data model schemas, and quickstart verification guides.
+Resolves technical choices, extracts entities, and generates technical design plan, data model schemas, research decisions, and quickstart verification guides.
 ```text
 /speckit-plan
 ```
@@ -198,11 +247,19 @@ Audits current codebase against feature spec and tasks to detect missing require
 
 ---
 
-### Optional Quality & Enhancement Commands
+### Spec Kit Command Reference Table
 
-- **/speckit-clarify**: Ask structured clarification questions to de-risk ambiguous requirements before planning.
-- **/speckit-analyze**: Run cross-artifact consistency analysis across `spec.md`, `plan.md`, and `tasks.md`.
-- **/speckit-checklist**: Generate custom quality checklists for specific features.
+| Slash Command | Stage / Phase | Description & Outputs |
+|---------------|---------------|-----------------------|
+| `/speckit-specify` | Specification | Creates feature directory, `spec.md`, and `checklists/requirements.md`. |
+| `/speckit-constitution` | Governance | Defines or updates ratifiable project constitution & quality gates. |
+| `/speckit-clarify` | Requirements | Asks up to 3 targeted clarification questions to resolve ambiguous spec items. |
+| `/speckit-plan` | Technical Design | Creates `plan.md`, `research.md`, `data-model.md`, `quickstart.md`, and `contracts/`. |
+| `/speckit-tasks` | Execution Planning | Creates dependency-ordered `tasks.md` checklist formatted by user story. |
+| `/speckit-implement` | Implementation | Executes tasks in `tasks.md` phase-by-phase, running unit tests and updating checklist. |
+| `/speckit-converge` | Audit & Delivery | Evaluates codebase completion against spec, plan, and tasks. |
+| `/speckit-analyze` | Quality Control | Non-destructive cross-artifact consistency analysis across `spec.md`, `plan.md`, and `tasks.md`. |
+| `/speckit-checklist` | Custom Review | Generates custom domain quality checklists (e.g. security, UX, performance). |
 
 ---
 
