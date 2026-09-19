@@ -22,23 +22,28 @@ export const UserSearchFilter: React.FC<UserSearchFilterProps> = ({
   onStatusChange,
   onReset,
 }) => {
+  const isFiltered = Boolean(search || role || status);
+
   return (
-    <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-4 bg-slate-900/60 border border-slate-800 rounded-2xl backdrop-blur-md">
+    <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-4 bg-slate-900/60 border border-slate-800/80 rounded-2xl backdrop-blur-md shadow-xl shadow-slate-950/40">
       <div className="flex-1 relative">
+        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500 text-sm">
+          🔍
+        </div>
         <input
           type="text"
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search by name or email address..."
-          className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 text-sm focus:outline-none focus:border-indigo-500 placeholder:text-slate-500 transition-all"
+          className="w-full pl-10 pr-4 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-slate-100 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 placeholder:text-slate-500 transition-all duration-150 shadow-inner"
         />
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3">
         <select
           value={role}
           onChange={(e) => onRoleChange(e.target.value)}
-          className="px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 text-xs font-medium focus:outline-none focus:border-indigo-500 transition-all"
+          className="px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-slate-200 text-xs font-semibold focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-150 cursor-pointer"
         >
           <option value="">All Roles</option>
           <option value="ADMIN">ADMIN</option>
@@ -49,19 +54,20 @@ export const UserSearchFilter: React.FC<UserSearchFilterProps> = ({
         <select
           value={status}
           onChange={(e) => onStatusChange(e.target.value)}
-          className="px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 text-xs font-medium focus:outline-none focus:border-indigo-500 transition-all"
+          className="px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-slate-200 text-xs font-semibold focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-150 cursor-pointer"
         >
           <option value="">All Statuses</option>
           <option value="ACTIVE">ACTIVE</option>
           <option value="INACTIVE">INACTIVE</option>
         </select>
 
-        {(search || role || status) && (
+        {isFiltered && (
           <button
             onClick={onReset}
-            className="px-3 py-2.5 text-xs font-medium text-slate-400 hover:text-slate-200 bg-slate-800/60 hover:bg-slate-800 rounded-xl transition-colors border border-slate-700/50"
+            className="px-4 py-2.5 text-xs font-semibold text-indigo-300 bg-indigo-500/10 hover:bg-indigo-500/20 hover:text-indigo-200 rounded-xl transition-all duration-150 border border-indigo-500/20 hover:border-indigo-500/40 hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-1.5 animate-fade-in"
           >
-            Reset
+            <span>🔄</span>
+            <span>Reset</span>
           </button>
         )}
       </div>
