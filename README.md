@@ -4,6 +4,7 @@
 [![Next.js](https://img.shields.io/badge/Frontend-Next.js_14-000000?logo=next.js)](https://nextjs.org/)
 [![MongoDB](https://img.shields.io/badge/Database-MongoDB-47A248?logo=mongodb)](https://www.mongodb.com/)
 [![Jest](https://img.shields.io/badge/Testing-Jest_Coverage_%3E90%25-C21325?logo=jest)](https://jestjs.io/)
+[![Spec Kit](https://img.shields.io/badge/Workflow-Spec--Driven_Development-blueviolet)](https://github.com/github/spec-kit)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 A decoupled, modern full-stack User Directory Management application built with a **NestJS REST API** backend, **Next.js 14+ (App Router)** frontend, and **MongoDB** persistence. Enforces **>90% unit test coverage** across both backend and frontend per project constitution rules.
@@ -57,7 +58,8 @@ A decoupled, modern full-stack User Directory Management application built with 
 │
 ├── specs/                    # Spec-driven development feature specifications
 │   ├── 001-user-crud-management/
-│   └── 002-project-documentation/
+│   ├── 002-project-documentation/
+│   └── 003-speckit-development-workflow/
 │
 └── .specify/                 # Spec Kit governance & memory configuration
     └── memory/
@@ -116,6 +118,91 @@ npm install
 npm run dev
 ```
 Open `http://localhost:3000` in your web browser.
+
+---
+
+## 🛠️ Spec-Driven Development Workflow (GitHub Spec Kit)
+
+This repository follows **Spec-Driven Development** using **GitHub Spec Kit** (`speckit`). All new features, refactoring, and major updates follow a structured phase lifecycle:
+
+```
+  ┌───────────────────────┐
+  │ /speckit-constitution │ ──▶ Establish or amend project principles & quality rules
+  └───────────┬───────────┘
+              ▼
+  ┌───────────────────────┐
+  │   /speckit-specify    │ ──▶ Create user journeys, requirements, & success criteria
+  └───────────┬───────────┘
+              ▼
+  ┌───────────────────────┐
+  │    /speckit-plan      │ ──▶ Design technical contracts, schemas, & research decisions
+  └───────────┬───────────┘
+              ▼
+  ┌───────────────────────┐
+  │    /speckit-tasks     │ ──▶ Generate dependency-ordered, testable task breakdown
+  └───────────┬───────────┘
+              ▼
+  ┌───────────────────────┐
+  │   /speckit-implement  │ ──▶ Execute tasks, write code/tests, & verify >90% coverage
+  └───────────┬───────────┘
+              ▼
+  ┌───────────────────────┐
+  │   /speckit-converge   │ ──▶ Assess implementation against spec & append remaining work
+  └───────────────────────┘
+```
+
+---
+
+### Step-by-Step Command Guide for Future Development
+
+#### 1. Establish/Update Principles (`/speckit-constitution`)
+Amends or establishes core project principles (e.g. test coverage requirements, API decoupling).
+```text
+/speckit-constitution Maintain a >90% unit test coverage for both API and UI
+```
+*Output*: [.specify/memory/constitution.md](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/.specify/memory/constitution.md)
+
+#### 2. Create Feature Specification (`/speckit-specify`)
+Defines the functional requirements, prioritized user stories (P1, P2, P3), acceptance criteria (Given-When-Then), and edge cases in plain language without low-level implementation details.
+```text
+/speckit-specify Add user profile avatar upload functionality using AWS S3
+```
+*Output*: `specs/<NNN-feature-name>/spec.md` & `checklists/requirements.md`
+
+#### 3. Create Implementation Plan & Design Artifacts (`/speckit-plan`)
+Resolves technical choices, extracts entities, and generates OpenAPI contracts, data model schemas, and quickstart verification guides.
+```text
+/speckit-plan
+```
+*Output*: `specs/<NNN-feature-name>/plan.md`, `data-model.md`, `research.md`, `quickstart.md`, `contracts/`
+
+#### 4. Generate Executable Task Breakdown (`/speckit-tasks`)
+Generates an actionable, dependency-ordered task checklist grouped by user story (P1 MVP first).
+```text
+/speckit-tasks
+```
+*Output*: `specs/<NNN-feature-name>/tasks.md`
+
+#### 5. Execute Implementation (`/speckit-implement`)
+Executes tasks phase-by-phase, writing tests alongside code, and ensuring all quality gates pass.
+```text
+/speckit-implement
+```
+*Output*: Codebase updates & completed `tasks.md`
+
+#### 6. Assess Codebase Convergence (`/speckit-converge`)
+Audits current codebase against feature spec and tasks to detect missing requirements or unbuilt work.
+```text
+/speckit-converge
+```
+
+---
+
+### Optional Quality & Enhancement Commands
+
+- **/speckit-clarify**: Ask structured clarification questions to de-risk ambiguous requirements before planning.
+- **/speckit-analyze**: Run cross-artifact consistency analysis across `spec.md`, `plan.md`, and `tasks.md`.
+- **/speckit-checklist**: Generate custom quality checklists for specific features.
 
 ---
 
