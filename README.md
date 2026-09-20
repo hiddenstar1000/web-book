@@ -200,20 +200,32 @@ docker build -t web-book-frontend ./frontend
 docker run -d -p 3000:3000 --name frontend web-book-frontend
 ```
 
-### 3. Kubernetes Deployment & ConfigMaps/Secrets
-The repository includes declarative Kubernetes manifests in [`k8s/`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/k8s):
-- **ConfigMap**: [`k8s/backend-configmap.yaml`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/k8s/backend-configmap.yaml) (Stores `PORT=3001`, included in `k8s/kustomization.yaml`).
-- **Secret**: [`k8s/backend-secret-example.yaml`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/k8s/backend-secret-example.yaml) (Template for `MONGODB_URI`, excluded from `k8s/kustomization.yaml` per security policy).
+### 3. Kubernetes Deployment & Multi-Environment Namespaces
+The repository includes declarative Kubernetes manifests separated by environment in [`k8s/dev/`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/k8s/dev) and [`k8s/prod/`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/k8s/prod):
+- **Development Environment (`k8s/dev`)**: Targets namespace **`app-web-book-dev`** via [`k8s/dev/kustomization.yaml`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/k8s/dev/kustomization.yaml).
+- **Production Environment (`k8s/prod`)**: Targets namespace **`app-web-book-prod`** via [`k8s/prod/kustomization.yaml`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/k8s/prod/kustomization.yaml).
+- **ConfigMap & Secrets**: Store `PORT=3001` in `backend-configmap.yaml` and reference runtime secrets via `backend-secret-example.yaml` templates (`backend-secret.yaml` excluded from git).
 
-#### Deployment Workflow:
+#### Development Environment Deployment:
 ```bash
-# 1. Create backend Secret independently (excluded from Kustomize bundle)
-cp k8s/backend-secret-example.yaml k8s/backend-secret.yaml
-# Edit MONGODB_URI in k8s/backend-secret.yaml with actual connection string
-kubectl apply -f k8s/backend-secret.yaml
+# 1. Create dev backend Secret independently
+cp k8s/dev/backend-secret-example.yaml k8s/dev/backend-secret.yaml
+# Edit MONGODB_URI in k8s/dev/backend-secret.yaml
+kubectl apply -f k8s/dev/backend-secret.yaml -n app-web-book-dev
 
-# 2. Deploy complete infrastructure stack via Kustomize (Deployments, Services, Ingress, ConfigMap)
-kubectl apply -k k8s/
+# 2. Deploy dev infrastructure stack (namespace app-web-book-dev)
+kubectl apply -k k8s/dev/
+```
+
+#### Production Environment Deployment:
+```bash
+# 1. Create prod backend Secret independently
+cp k8s/prod/backend-secret-example.yaml k8s/prod/backend-secret.yaml
+# Edit MONGODB_URI in k8s/prod/backend-secret.yaml
+kubectl apply -f k8s/prod/backend-secret.yaml -n app-web-book-prod
+
+# 2. Deploy prod infrastructure stack (namespace app-web-book-prod)
+kubectl apply -k k8s/prod/
 ```
 
 ### 4. CI/CD Release Pipeline (GitHub Actions & GHCR)
@@ -222,7 +234,7 @@ Automated container publishing and deployment is configured in [`.github/workflo
 - **GHCR Image Artifacts**:
   - `ghcr.io/${{ secrets.GH_USER }}/web-book-backend:${{ env.IMAGE_TAG }}`
   - `ghcr.io/${{ secrets.GH_USER }}/web-book-frontend:${{ env.IMAGE_TAG }}`
-- **Automated Deployment**: SSH connection to remote host issuing MicroK8s rolling restarts for `app-em-dev` (DEV) or `app-em-prod` (PROD) namespaces.
+- **Automated Deployment**: SSH connection to remote host issuing MicroK8s Kustomize apply and rolling restarts targeting `app-web-book-dev` (DEV) or `app-web-book-prod` (PROD) namespaces.
 
 ---
 

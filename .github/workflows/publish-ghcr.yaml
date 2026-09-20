@@ -40,6 +40,12 @@ jobs:
           push: true
           tags: ghcr.io/${{ secrets.GH_USER }}/web-book-frontend:${{ env.IMAGE_TAG }}
 
+      - name: Validate Kubernetes Manifests
+        run: |
+          kubectl kustomize k8s/dev/ > /dev/null
+          kubectl kustomize k8s/prod/ > /dev/null
+          echo "Kubernetes dev and prod manifests validated successfully"
+
       - name: Deploy to Remote Server via SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -52,11 +58,13 @@ jobs:
             if [ "${{ github.ref_name }}" = "main" ]; then
               sudo su -
               echo "=== Executing PROD Deployment (MicroK8s) ==="
-              microk8s kubectl rollout restart deployment/web-book-backend -n app-em-prod
-              microk8s kubectl rollout restart deployment/web-book-frontend -n app-em-prod
+              microk8s kubectl apply -k k8s/prod/
+              microk8s kubectl rollout restart deployment/web-book-backend -n app-web-book-prod
+              microk8s kubectl rollout restart deployment/web-book-frontend -n app-web-book-prod
             else
               sudo su -
               echo "=== Executing DEV Deployment (MicroK8s) ==="
-              microk8s kubectl rollout restart deployment/web-book-backend -n app-em-dev
-              microk8s kubectl rollout restart deployment/web-book-frontend -n app-em-dev
+              microk8s kubectl apply -k k8s/dev/
+              microk8s kubectl rollout restart deployment/web-book-backend -n app-web-book-dev
+              microk8s kubectl rollout restart deployment/web-book-frontend -n app-web-book-dev
             fi
