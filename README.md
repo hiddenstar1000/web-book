@@ -200,7 +200,23 @@ docker build -t web-book-frontend ./frontend
 docker run -d -p 3000:3000 --name frontend web-book-frontend
 ```
 
-### 3. CI/CD Release Pipeline (GitHub Actions & GHCR)
+### 3. Kubernetes Deployment & ConfigMaps/Secrets
+The repository includes declarative Kubernetes manifests in [`k8s/`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/k8s):
+- **ConfigMap**: [`k8s/backend-configmap.yaml`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/k8s/backend-configmap.yaml) (Stores `PORT=3001`, included in `k8s/kustomization.yaml`).
+- **Secret**: [`k8s/backend-secret-example.yaml`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/k8s/backend-secret-example.yaml) (Template for `MONGODB_URI`, excluded from `k8s/kustomization.yaml` per security policy).
+
+#### Deployment Workflow:
+```bash
+# 1. Create backend Secret independently (excluded from Kustomize bundle)
+cp k8s/backend-secret-example.yaml k8s/backend-secret.yaml
+# Edit MONGODB_URI in k8s/backend-secret.yaml with actual connection string
+kubectl apply -f k8s/backend-secret.yaml
+
+# 2. Deploy complete infrastructure stack via Kustomize (Deployments, Services, Ingress, ConfigMap)
+kubectl apply -k k8s/
+```
+
+### 4. CI/CD Release Pipeline (GitHub Actions & GHCR)
 Automated container publishing and deployment is configured in [`.github/workflows/publish-ghcr.yaml`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/.github/workflows/publish-ghcr.yaml):
 - **Triggers**: Pushes to `main` and `dev` branches or manual `workflow_dispatch`.
 - **GHCR Image Artifacts**:

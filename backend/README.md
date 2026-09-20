@@ -95,6 +95,23 @@ docker build -t web-book-backend .
 docker run -d -p 3001:3001 --name web-book-backend \
   -e MONGODB_URI="mongodb://host.docker.internal:27017/user_crud_db" \
   web-book-backend
+---
+
+## ☸️ Kubernetes ConfigMaps & Secrets
+
+The backend configuration variables (`.env`) are mapped to Kubernetes API objects:
+- **ConfigMap (`k8s/backend-configmap.yaml`)**: Stores non-sensitive settings (`PORT=3001`). Included in `k8s/kustomization.yaml`.
+- **Secret (`k8s/backend-secret-example.yaml`)**: Template for sensitive connection credentials (`MONGODB_URI`). Excluded from `k8s/kustomization.yaml` per security policy.
+
+### Deploying Secrets & Manifests:
+```bash
+# 1. Apply Secret independently (excluded from Kustomize bundle)
+cp ../k8s/backend-secret-example.yaml ../k8s/backend-secret.yaml
+# Edit MONGODB_URI in ../k8s/backend-secret.yaml
+kubectl apply -f ../k8s/backend-secret.yaml
+
+# 2. Deploy backend resources via Kustomize (Deployment, Service, ConfigMap)
+kubectl apply -k ../k8s/
 ```
 
 ---
