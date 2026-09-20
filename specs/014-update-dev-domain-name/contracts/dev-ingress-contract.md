@@ -1,3 +1,12 @@
+# Dev Ingress Contract Specs
+
+**Feature**: `specs/014-update-dev-domain-name`
+
+---
+
+## Dev Ingress Contract (`k8s/dev/ingress.yaml`)
+
+```yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -29,3 +38,4 @@ spec:
                 name: web-book-frontend-service
                 port:
                   number: 3000
+```

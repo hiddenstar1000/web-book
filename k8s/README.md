@@ -16,7 +16,7 @@ k8s/
 │   ├── frontend-service.yaml         # LoadBalancer service on port 3000
 │   ├── backend-configmap.yaml        # ConfigMap (PORT=3001)
 │   ├── backend-secret-example.yaml   # Template secret (MONGODB_URI)
-│   ├── ingress.yaml                  # Ingress routing spanish-story.dixonai.net (TLS: spanish-story-tls)
+│   ├── ingress.yaml                  # Ingress routing spanish-stories.dixonai.net (TLS: spanish-stories-tls)
 │   └── kustomization.yaml            # Sets namespace: app-web-book-dev
 └── prod/
     ├── namespace.yaml                # Namespace app-web-book-prod definition

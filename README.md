@@ -202,7 +202,7 @@ docker run -d -p 3000:3000 --name frontend web-book-frontend
 
 ### 3. Kubernetes Deployment & Multi-Environment Namespaces
 The repository includes declarative Kubernetes manifests separated by environment in [`k8s/dev/`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/k8s/dev) and [`k8s/prod/`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/k8s/prod):
-- **Development Environment (`k8s/dev`)**: Targets namespace **`app-web-book-dev`** via [`k8s/dev/kustomization.yaml`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/k8s/dev/kustomization.yaml) mapped to domain **`spanish-story.dixonai.net`** with TLS secret `spanish-story-tls`.
+- **Development Environment (`k8s/dev`)**: Targets namespace **`app-web-book-dev`** via [`k8s/dev/kustomization.yaml`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/k8s/dev/kustomization.yaml) mapped to domain **`spanish-stories.dixonai.net`** with TLS secret `spanish-stories-tls`.
 - **Production Environment (`k8s/prod`)**: Targets namespace **`app-web-book-prod`** via [`k8s/prod/kustomization.yaml`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/k8s/prod/kustomization.yaml) mapped to domain **`tripitaka.dixonai.net`** with TLS secret `tripitaka-tls`.
 - **ConfigMap & Secrets**: Store `PORT=3001` in `backend-configmap.yaml` and reference runtime secrets via `backend-secret-example.yaml` templates (`backend-secret.yaml` excluded from git).
 
