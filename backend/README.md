@@ -40,6 +40,12 @@ backend/
 └── package.json
 ```
 
+## ⚡ Prerequisites
+
+- **Node.js**: `v22.x` or higher
+- **npm**: `v10.x` or higher
+- **MongoDB**: Local MongoDB instance (`mongodb://localhost:27017/user_crud_db`) or Docker container
+
 ---
 
 ## 🌐 Environment Configuration
@@ -73,6 +79,22 @@ npm run test
 
 # Run unit tests with coverage report
 npm run test:cov
+```
+
+---
+
+## 🐳 Docker Container Execution
+
+Building and running the multi-stage NestJS Docker container:
+
+```bash
+# Build backend image using Node 22 Alpine base
+docker build -t web-book-backend .
+
+# Run container exposing port 3001
+docker run -d -p 3001:3001 --name web-book-backend \
+  -e MONGODB_URI="mongodb://host.docker.internal:27017/user_crud_db" \
+  web-book-backend
 ```
 
 ---

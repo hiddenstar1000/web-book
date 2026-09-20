@@ -85,6 +85,11 @@ frontend/
 └── package.json
 ```
 
+## ⚡ Prerequisites
+
+- **Node.js**: `v22.x` or higher
+- **npm**: `v10.x` or higher
+
 ---
 
 ## 🌐 Environment Configuration
@@ -117,6 +122,20 @@ npm run test
 
 # Run unit tests with coverage report
 npm run test:cov
+```
+
+---
+
+## 🐳 Docker Container Execution
+
+Building and running the multi-stage Next.js Docker container:
+
+```bash
+# Build frontend image using Node 22 Alpine base
+docker build -t web-book-frontend .
+
+# Run container exposing port 3000
+docker run -d -p 3000:3000 --name web-book-frontend web-book-frontend
 ```
 
 ---

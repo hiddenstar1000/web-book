@@ -130,8 +130,9 @@ Common design tokens are defined in `globals.css` using `@layer utilities`:
 ## ⚡ Quickstart Guide
 
 ### Prerequisites
-- **Node.js**: `v20.x` or higher
+- **Node.js**: `v22.x` or higher
 - **npm**: `v10.x` or higher
+- **Docker**: Docker Engine / Docker Desktop (for container deployment)
 - **MongoDB**: Local MongoDB instance running on `mongodb://localhost:27017/user_crud_db` or via Docker:
 
 ```bash
@@ -167,6 +168,45 @@ npm install
 npm run dev
 ```
 Open `http://localhost:3000` in your web browser.
+
+---
+
+## 🐳 Docker & Container Deployment
+
+### 1. Multi-Stage Production Dockerfiles
+The application includes multi-stage production `Dockerfile` configurations targeting `node:22-alpine` for minimal footprint (<300MB) and non-root execution (`USER node`):
+- **Backend Dockerfile**: [`backend/Dockerfile`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/backend/Dockerfile) (Port 3001)
+- **Frontend Dockerfile**: [`frontend/Dockerfile`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/frontend/Dockerfile) (Port 3000)
+
+### 2. Building & Running Container Images Locally
+
+#### Backend Container (Port 3001)
+```bash
+# Build backend image
+docker build -t web-book-backend ./backend
+
+# Run backend container with MongoDB connection
+docker run -d -p 3001:3001 --name backend \
+  -e MONGODB_URI="mongodb://host.docker.internal:27017/user_crud_db" \
+  web-book-backend
+```
+
+#### Frontend Container (Port 3000)
+```bash
+# Build frontend image
+docker build -t web-book-frontend ./frontend
+
+# Run frontend container
+docker run -d -p 3000:3000 --name frontend web-book-frontend
+```
+
+### 3. CI/CD Release Pipeline (GitHub Actions & GHCR)
+Automated container publishing and deployment is configured in [`.github/workflows/publish-ghcr.yaml`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/.github/workflows/publish-ghcr.yaml):
+- **Triggers**: Pushes to `main` and `dev` branches or manual `workflow_dispatch`.
+- **GHCR Image Artifacts**:
+  - `ghcr.io/${{ secrets.GH_USER }}/web-book-backend:${{ env.IMAGE_TAG }}`
+  - `ghcr.io/${{ secrets.GH_USER }}/web-book-frontend:${{ env.IMAGE_TAG }}`
+- **Automated Deployment**: SSH connection to remote host issuing MicroK8s rolling restarts for `app-em-dev` (DEV) or `app-em-prod` (PROD) namespaces.
 
 ---
 
