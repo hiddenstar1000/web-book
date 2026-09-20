@@ -1,3 +1,10 @@
+# Interface Contract: Upgraded Release Workflow Actions
+
+## Contract Specification
+
+**Target File**: `.github/workflows/publish-ghcr.yaml`
+
+```yaml
 name: Release
 
 on:
@@ -60,3 +67,4 @@ jobs:
               microk8s kubectl rollout restart deployment/web-book-backend -n app-em-dev
               microk8s kubectl rollout restart deployment/web-book-frontend -n app-em-dev
             fi
+```
