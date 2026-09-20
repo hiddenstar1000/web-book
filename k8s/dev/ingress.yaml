@@ -3,11 +3,17 @@ kind: Ingress
 metadata:
   name: web-book-ingress
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - spanish-story.dixonai.net
+      secretName: spanish-story-tls
   rules:
-    - http:
+    - host: spanish-story.dixonai.net
+      http:
         paths:
           - path: /api
             pathType: Prefix

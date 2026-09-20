@@ -3,11 +3,17 @@ kind: Ingress
 metadata:
   name: web-book-ingress
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - tripitaka.dixonai.net
+      secretName: tripitaka-tls
   rules:
-    - http:
+    - host: tripitaka.dixonai.net
+      http:
         paths:
           - path: /api
             pathType: Prefix
