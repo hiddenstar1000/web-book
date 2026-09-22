@@ -56,6 +56,30 @@ describe('Frontend API Client & Users API', () => {
 
       await expect(apiClient('/users')).rejects.toThrow('An error occurred');
     });
+
+    it('tests getApiBaseUrl helper logic', () => {
+      const { getApiBaseUrl } = require('@/lib/api/client');
+      const originalEnv = process.env.NEXT_PUBLIC_API_URL;
+      
+      process.env.NEXT_PUBLIC_API_URL = 'http://custom-api.com/api/v1';
+      expect(getApiBaseUrl()).toBe('http://custom-api.com/api/v1');
+
+      delete process.env.NEXT_PUBLIC_API_URL;
+      expect(getApiBaseUrl()).toBe('http://localhost:3001/api/v1');
+
+      const originalHostname = window.location.hostname;
+      Object.defineProperty(window, 'location', {
+        value: { hostname: 'spanish-stories.dixonai.net' },
+        writable: true,
+      });
+      expect(getApiBaseUrl()).toBe('/api/v1');
+
+      Object.defineProperty(window, 'location', {
+        value: { hostname: originalHostname },
+        writable: true,
+      });
+      process.env.NEXT_PUBLIC_API_URL = originalEnv;
+    });
   });
 
   describe('users API functions', () => {
