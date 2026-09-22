@@ -216,30 +216,30 @@ The repository includes declarative Kubernetes manifests separated by environmen
 
 - **Development Environment (`k8s/dev`)**: Targets namespace **`app-web-book-dev`** via [`k8s/dev/kustomization.yaml`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/k8s/dev/kustomization.yaml) mapped to domain **`spanish-stories.dixonai.net`** with TLS secret `spanish-stories-tls`.
 - **Production Environment (`k8s/prod`)**: Targets namespace **`app-web-book-prod`** via [`k8s/prod/kustomization.yaml`](file:///Users/dixon/Projects/Personal/Dixon%20AI/web-book/k8s/prod/kustomization.yaml) mapped to domain **`tripitaka.dixonai.net`** with TLS secret `tripitaka-tls`.
-- **ConfigMap & Secrets**: Store `PORT=3001` in `backend-configmap.yaml` and reference runtime secrets via `backend-secret-example.yaml` templates (`backend-secret.yaml` excluded from git).
+- **ConfigMap & Secrets**: Store `PORT=3001` in `backend-configmap.yaml` and reference runtime secrets via `secret-example.yaml` templates containing both `web-book-backend-secret` and `ghcr-secret` (`secret.yaml` excluded from git).
 
 #### Development Environment Deployment:
 
 ```bash
-# 1. Deploy dev infrastructure stack (namespace app-web-book-dev)
-kubectl apply -k k8s/dev/
+# 1. Provision environment secrets (backend Secret & GHCR image pull secret)
+cp k8s/dev/secret-example.yaml k8s/dev/secret.yaml
+# Edit MONGODB_URI and GHCR credentials in k8s/dev/secret.yaml
+kubectl apply -f k8s/dev/secret.yaml -n app-web-book-dev
 
-# 2. Create dev backend Secret independently
-cp k8s/dev/backend-secret-example.yaml k8s/dev/backend-secret.yaml
-# Edit MONGODB_URI in k8s/dev/backend-secret.yaml
-kubectl apply -f k8s/dev/backend-secret.yaml -n app-web-book-dev
+# 2. Deploy dev infrastructure stack (namespace app-web-book-dev)
+kubectl apply -k k8s/dev/
 ```
 
 #### Production Environment Deployment:
 
 ```bash
-# 1. Deploy prod infrastructure stack (namespace app-web-book-prod)
-kubectl apply -k k8s/prod/
+# 1. Provision environment secrets (backend Secret & GHCR image pull secret)
+cp k8s/prod/secret-example.yaml k8s/prod/secret.yaml
+# Edit MONGODB_URI and GHCR credentials in k8s/prod/secret.yaml
+kubectl apply -f k8s/prod/secret.yaml -n app-web-book-prod
 
-# 2. Create prod backend Secret independently
-cp k8s/prod/backend-secret-example.yaml k8s/prod/backend-secret.yaml
-# Edit MONGODB_URI in k8s/prod/backend-secret.yaml
-kubectl apply -f k8s/prod/backend-secret.yaml -n app-web-book-prod
+# 2. Deploy prod infrastructure stack (namespace app-web-book-prod)
+kubectl apply -k k8s/prod/
 ```
 
 ### 4. CI/CD Release Pipeline (GitHub Actions & GHCR)

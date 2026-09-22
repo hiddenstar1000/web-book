@@ -14,10 +14,12 @@ spec:
       labels:
         app: web-book-frontend
     spec:
+      imagePullSecrets:
+        - name: ghcr-secret
       containers:
         - name: frontend
-          image: web-book-frontend:latest
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/hiddenstar1000/web-book-frontend:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
               name: http

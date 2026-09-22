@@ -71,12 +71,12 @@ web_modules/
 !.env.example
 
 # Kubernetes secret files
-k8s/backend-secret.yaml
-k8s/dev/backend-secret.yaml
-k8s/prod/backend-secret.yaml
-!k8s/backend-secret-example.yaml
-!k8s/dev/backend-secret-example.yaml
-!k8s/prod/backend-secret-example.yaml
+k8s/secret.yaml
+k8s/dev/secret.yaml
+k8s/prod/secret.yaml
+!k8s/secret-example.yaml
+!k8s/dev/secret-example.yaml
+!k8s/prod/secret-example.yaml
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
