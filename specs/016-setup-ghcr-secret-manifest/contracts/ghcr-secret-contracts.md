@@ -11,6 +11,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: web-book-backend-secret
+  namespace: app-web-book-dev
   labels:
     app: web-book-backend
 type: Opaque
@@ -21,6 +22,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: ghcr-secret
+  namespace: app-web-book-dev
   labels:
     app: web-book
 type: kubernetes.io/dockerconfigjson
@@ -47,6 +49,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: web-book-backend-secret
+  namespace: app-web-book-prod
   labels:
     app: web-book-backend
 type: Opaque
@@ -57,6 +60,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: ghcr-secret
+  namespace: app-web-book-prod
   labels:
     app: web-book
 type: kubernetes.io/dockerconfigjson
